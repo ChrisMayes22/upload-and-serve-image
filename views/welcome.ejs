@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="stylesheets/style.css">
+
+    </head>
+    <body>
+        <main>
+            <h1>Welcome <%= username %>!</h1>
+            <h4>Please upload a user image</h2>
+            <%- image %>
+            <form action="process_upload-image" method="post" enctype="multipart/form-data">
+                <input type="file" placeholder="file" name="user-image"/>
+                <button>submit</button>
+            </form>
+            <%= msg %>
+            <a href='/logout'>Logout</a>
+        </main>
+    </body>
+</html>
