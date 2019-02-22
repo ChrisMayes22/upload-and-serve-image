@@ -82,10 +82,13 @@ app.get('/login', (req, res, next) => {
     res.render('login');
 })
 app.get('/welcome', (req, res, next) => {
+    const users = JSON.parse(fs.readFileSync('./db-mock/db.json'));
+    const targetUser = users.find(char => char.username === req.cookies.username);
+    console.log('TARGETUSER', targetUser);
     if(req.cookies.username){
         res.render('welcome', {
             username: req.cookies.username,
-            image: `<img src="${'/uploads/' + req.cookies.filename}"/>`
+            image: `<img src="${'/uploads/' + targetUser.fileName}"/>`
         });
     } else {
         next(new Error('illegalAccessAttempt'));
@@ -105,7 +108,13 @@ app.post('/process_login', (req, res, next) => {
 })
 
 app.post('/process_upload-image', deleteUserImage, upload.single('user-image'), (req, res, next) => {
-    res.cookie('filename', req.file.filename);
+    const users = JSON.parse(fs.readFileSync('./db-mock/db.json'));
+    users.map((char, i) => {
+        if(char.username === req.cookies.username){
+            users[i].fileName = req.file.filename; 
+        }
+    })
+    fs.writeFileSync('./db-mock/db.json', JSON.stringify(users));
     res.redirect('/welcome');
 })
 
@@ -122,7 +131,13 @@ app.use((err, req, res, next) => {
         } else {
             res.redirect(`/login?status=${err.message}`);
         }
+    } else { 
+        res.status(500).send(err);
     }
+})
+
+app.use(function (req, res, next) {
+    res.status(404).send("404 -- PAGE NOTE FOUND")
 })
 
 app.listen(3000);
