@@ -10,11 +10,11 @@
             <h4>Please upload a user image</h2>
             <%- image %>
             <form action="process_upload-image" method="post" enctype="multipart/form-data">
-                <input type="file" placeholder="file" name="user-image"/>
+                <input type="file" placeholder="file" name="userImage"/>
                 <button>submit</button>
             </form>
             <%= msg %>
-            <a href='/logout'>Logout</a>
+            <a class="logout" href='/logout'>Logout</a>
         </main>
     </body>
 </html>
